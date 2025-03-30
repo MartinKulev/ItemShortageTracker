@@ -1,0 +1,55 @@
+﻿@page "/"
+@using ItemShortageTracker.Data
+<section class="body-container">
+    <section class="centered-section">
+        <div class="col-xl-3 text-center m-3">
+            <div class="form-group">
+                <label>Name:</label>
+                <InputText @bind-Value="ItemShortageVm.NewItem.Name" class="form-control"></InputText>
+            </div>
+        </div>
+        <div class="col-xl-3 text-center m-3">
+            <div class="form-group">
+                <label>Status:</label>
+                <InputSelect @bind-Value="ItemShortageVm.NewItem.ShortageStatus" class="form-control">
+                    @foreach (var option in statusLabels)
+                    {
+                        <option value="@((ShortageStatus)statusLabels.IndexOf(option))">@option</option>
+                    }
+                </InputSelect>
+            </div>
+        </div>
+        <section class="centered-section-2">
+            <button type="submit" @onclick="AddNewItem" class="primary-button">Add</button>
+        </section>
+    </section>
+    <table>
+        <thead>
+        </thead>
+        <tbody>
+            @foreach (var item in ItemShortageVm.Items)
+            {
+                <tr>
+                    <td class="p-2 fw-bold" style="font-size: 10px">@item.Name</td>
+                    <td class="p-2">
+                        <div class="slider-container">
+                            <div class="slider-labels">
+                                @foreach (var label in statusLabels)
+                                {
+                                    <span>@label</span>
+                                }
+                            </div>
+                            <input type="range" min="0" max="@maxStatus" step="1"
+                                   class="slider"
+                                   value="@((int)item.ShortageStatus)"
+                                   @oninput="@(e => item.ShortageStatus = (ShortageStatus)int.Parse(e.Value.ToString()))" />
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <section class="centered-section">
+        <button type="submit" @onclick="SaveChanges" class="primary-button">Save</button>
+    </section>
+</section>
