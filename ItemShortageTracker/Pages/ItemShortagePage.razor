@@ -1,6 +1,16 @@
 ﻿@page "/"
+@page "/{categoryId}"
+@inject NavigationManager Navigation
 @using ItemShortageTracker.Data
 <section class="body-container">
+    <section class="d-flex flex-row justify-content-between">
+        @foreach (var category in ItemShortageVm.Categories)
+        {
+            <button @onclick="@(() => Navigation.NavigateTo($"/{category.Id}"))" class="category-button">
+                @category.Id
+            </button>
+        }
+    </section>
     <section class="centered-section">
         <div class="col-xl-3 text-center m-3">
             <div class="form-group">
@@ -23,15 +33,15 @@
             <button type="submit" @onclick="AddNewItem" class="primary-button">Add</button>
         </section>
     </section>
-    <table>
+    <table class="w-100" style="max-width:500px">
         <thead>
         </thead>
         <tbody>
             @foreach (var item in ItemShortageVm.Items)
             {
                 <tr>
-                    <td class="p-2 fw-bold" style="font-size: 10px">@item.Name</td>
-                    <td class="p-2">
+                    <td class="p-1 fw-bold" style="font-size: 10px; width:15%">@item.Name</td>
+                    <td class="p-1" style="width:65%">
                         <div class="slider-container">
                             <div class="slider-labels">
                                 @foreach (var label in statusLabels)

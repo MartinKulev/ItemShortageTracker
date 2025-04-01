@@ -6,7 +6,9 @@ namespace ItemShortageTracker.Services
     {
         Task SaveItem(List<Item> items);
 
-        Task<List<Item>> GetAllItems();
+        Task<List<Item>> GetAllItems(int categoryId);
+
+        Task<List<Category>> GetAllCategories();
 
         Task AddNewItem(Item item);
     }

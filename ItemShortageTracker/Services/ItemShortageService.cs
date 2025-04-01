@@ -18,9 +18,17 @@ namespace ItemShortageTracker.Services
             await _itemShortageTrackerDbContext.SaveChangesAsync();
         }
 
-        public async Task<List<Item>> GetAllItems()
+        public async Task<List<Item>> GetAllItems(int categoryId)
         {
-           return await _itemShortageTrackerDbContext.Items.ToListAsync();
+           return await _itemShortageTrackerDbContext.Items
+                .Where(i => i.CategoryId == categoryId)
+                .ToListAsync();
+        }
+
+        public async Task<List<Category>> GetAllCategories()
+        {
+            return await _itemShortageTrackerDbContext.Categories
+                 .ToListAsync();
         }
 
         public async Task AddNewItem(Item item)

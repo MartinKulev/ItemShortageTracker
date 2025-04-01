@@ -7,6 +7,9 @@ namespace ItemShortageTracker.Pages
 {
     public partial class ItemShortagePage
     {
+        [Parameter]
+        public string CategoryId { get; set; }
+
         [Inject]
         IItemShortageService ItemShortageService { get; set; }
 
@@ -17,8 +20,24 @@ namespace ItemShortageTracker.Pages
 
         protected override async Task OnInitializedAsync()
         {
-            ItemShortageVm.Items = await ItemShortageService.GetAllItems();
-            await base.OnInitializedAsync();
+            await LoadData();
+        }
+
+        protected override async Task OnParametersSetAsync()
+        {
+            await LoadData();
+        }
+
+        private async Task LoadData()
+        {
+            if (string.IsNullOrEmpty(CategoryId))
+            {
+                CategoryId = "1";
+            }
+
+            ItemShortageVm.Items = await ItemShortageService.GetAllItems(int.Parse(CategoryId));
+            ItemShortageVm.Categories = await ItemShortageService.GetAllCategories();
+            await InvokeAsync(StateHasChanged);
         }
         public async Task SaveChanges()
         {
@@ -27,8 +46,10 @@ namespace ItemShortageTracker.Pages
 
         public async Task AddNewItem()
         {
+            ItemShortageVm.NewItem.CategoryId = int.Parse(CategoryId);
             await ItemShortageService.AddNewItem(ItemShortageVm.NewItem);
-            ItemShortageVm.Items = await ItemShortageService.GetAllItems();
+            ItemShortageVm.Items = await ItemShortageService.GetAllItems(int.Parse(CategoryId));
+            ItemShortageVm.NewItem = new Item();
             await InvokeAsync(StateHasChanged);
         }
     }
