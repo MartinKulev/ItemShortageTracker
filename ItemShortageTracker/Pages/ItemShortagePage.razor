@@ -63,3 +63,13 @@
         <button type="submit" @onclick="SaveChanges" class="primary-button">Save</button>
     </section>
 </section>
+<section id="messageBoxId" class="container position-fixed" style="top: 70px; left: 25%; right: 10%; width: auto; display: none;">
+    <div class="row justify-content-center">
+        <div class="alert-success" role="alert">
+            <div class="text-center mb-3 mt-3 mt-1 mb-1">
+                @ItemShortageVm.ConfirmationMessage
+            </div>
+        </div>
+    </div>
+</section>
+

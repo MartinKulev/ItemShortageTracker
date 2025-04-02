@@ -1,6 +1,7 @@
 ﻿using ItemShortageTracker.Data;
 using ItemShortageTracker.Services;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using System.Threading.Tasks;
 
 namespace ItemShortageTracker.Pages
@@ -12,6 +13,9 @@ namespace ItemShortageTracker.Pages
 
         [Inject]
         IItemShortageService ItemShortageService { get; set; }
+
+        [Inject]
+        IJSRuntime Js { get; set; } 
 
         public ItemShortageVm ItemShortageVm { get; set; } = new ItemShortageVm();
 
@@ -41,6 +45,8 @@ namespace ItemShortageTracker.Pages
         }
         public async Task SaveChanges()
         {
+            ItemShortageVm.ConfirmationMessage = "Items saved successfully!";
+            await Js.InvokeVoidAsync("toggleMessageBox", "messageBoxId", 3000);
             await ItemShortageService.SaveItem(ItemShortageVm.Items);
         }
 
@@ -50,6 +56,8 @@ namespace ItemShortageTracker.Pages
             await ItemShortageService.AddNewItem(ItemShortageVm.NewItem);
             ItemShortageVm.Items = await ItemShortageService.GetAllItems(int.Parse(CategoryId));
             ItemShortageVm.NewItem = new Item();
+            ItemShortageVm.ConfirmationMessage = "Item added successfully!";
+            await Js.InvokeVoidAsync("toggleMessageBox", "messageBoxId", 3000);
             await InvokeAsync(StateHasChanged);
         }
     }

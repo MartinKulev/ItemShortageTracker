@@ -7,5 +7,7 @@
         public List<Category> Categories { get; set; } = new List<Category>();
 
         public Item NewItem { get; set; } = new Item();
+
+        public string ConfirmationMessage { get; set; }
     }
 }
